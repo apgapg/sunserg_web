@@ -1,4 +1,9 @@
-# sunserg_web
+# Sunserg
+The Best Search and Organizing Tool for Your Company.
+
+Visit Sunserg: [sunserg.com](sunserg.com)
+
+Live Product: TBD
 
 ## Project setup
 ```
