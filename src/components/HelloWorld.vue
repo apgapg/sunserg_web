@@ -25,7 +25,23 @@
             ></v-img>
           </div>
           <div class="d-flex justify-center my-2">
-            <v-btn text color="blue" class>+ Connect</v-btn>
+            <v-progress-circular
+              indeterminate
+              color="blue"
+              size="28"
+              class="ma-1"
+              width="2"
+              v-if="gDriveAuthenticated==null"
+            ></v-progress-circular>
+
+            <v-btn
+              text
+              color="blue"
+              class
+              v-else-if="!gDriveAuthenticated"
+              v-on:click="onDriveLoginClick"
+            >+ Connect</v-btn>
+            <v-btn text color="red" class v-on:click="onDriveLogoutClick" v-else>REMOVE</v-btn>
           </div>
         </v-card>
       </v-col>
@@ -78,6 +94,7 @@
       contain
       height="64"
     ></v-img>
+    <div class="mt-16"></div>
   </v-container>
 </template>
 
@@ -86,56 +103,77 @@ export default {
   name: "HelloWorld",
 
   data: () => ({
-    ecosystem: [
-      {
-        text: "vuetify-loader",
-        href: "https://github.com/vuetifyjs/vuetify-loader"
-      },
-      {
-        text: "github",
-        href: "https://github.com/vuetifyjs/vuetify"
-      },
-      {
-        text: "awesome-vuetify",
-        href: "https://github.com/vuetifyjs/awesome-vuetify"
+    gDriveAuthenticated: null
+  }),
+  methods: {
+    onDriveLoginClick: function() {
+      if (!this.gDriveAuthenticated) {
+        console.log("on login click called");
+        this.$gapi.getGapiClient().then(gapi => {
+          gapi.auth2.getAuthInstance().signIn();
+        });
       }
-    ],
-    importantLinks: [
-      {
-        text: "Documentation",
-        href: "https://vuetifyjs.com"
-      },
-      {
-        text: "Chat",
-        href: "https://community.vuetifyjs.com"
-      },
-      {
-        text: "Made with Vuetify",
-        href: "https://madewithvuejs.com/vuetify"
-      },
-      {
-        text: "Twitter",
-        href: "https://twitter.com/vuetifyjs"
-      },
-      {
-        text: "Articles",
-        href: "https://medium.com/vuetify"
-      }
-    ],
-    whatsNext: [
-      {
-        text: "Explore components",
-        href: "https://vuetifyjs.com/components/api-explorer"
-      },
-      {
-        text: "Select a layout",
-        href: "https://vuetifyjs.com/getting-started/pre-made-layouts"
-      },
-      {
-        text: "Frequently Asked Questions",
-        href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
-      }
-    ]
-  })
+    },
+    onDriveLogoutClick: function() {
+      this.$gapi
+        .logout()
+        .then(() => {
+          this.gDriveAuthenticated = false;
+          console.log("Drive logout successful");
+        })
+        .catch(err => {
+          // eslint-disable-next-line no-console
+          console.error("Login call failed: %s", err.message);
+        });
+    },
+    // eslint-disable-next-line no-unused-vars
+    updateSigninStatus: function(isSignedIn, gapi) {
+      console.log("Auth changed: " + isSignedIn);
+      this.gDriveAuthenticated = isSignedIn;
+      //if (this.gDriveAuthenticated) listFiles(gapi);
+    }
+  },
+  computed: {},
+  mounted() {
+    this.$gapi.getGapiClient().then(gapi => {
+      this.updateSigninStatus(
+        gapi.auth2.getAuthInstance().isSignedIn.get(),
+        gapi
+      );
+      gapi.auth2.getAuthInstance().isSignedIn.listen(value => {
+        this.updateSigninStatus(value, gapi);
+      });
+    });
+  }
 };
+
+// // eslint-disable-next-line no-unused-vars
+// function updateSigninStatus(isSignedIn) {
+//   console.log("updateSigninStatus ", isSignedIn);
+//   if (isSignedIn) {
+//     listFiles();
+//   }
+// }
+
+// eslint-disable-next-line no-unused-vars
+function listFiles(gapi) {
+  gapi.client.drive.files
+    .list({
+      pageSize: 10,
+      fields: "nextPageToken, files(id, name)"
+    })
+    .then(function(response) {
+      //appendPre('Files:');
+      var files = response.result.files;
+      if (files && files.length > 0) {
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          console.log(file.name);
+          //appendPre(file.name + ' (' + file.id + ')');
+        }
+      } else {
+        //appendPre('No files found.');
+      }
+    });
+}
 </script>

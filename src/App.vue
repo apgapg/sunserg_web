@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar id="app-bar" app color="white" elevation="0" height="64" clipped-left="true">
+    <v-app-bar id="app-bar" app color="white" elevation="0" height="64" clipped-left>
       <div class="d-flex align-center">
         <p class="text-h5 font-weight-light ma-0 pa-0">Sunserg</p>
       </div>
