@@ -3,6 +3,7 @@
     <v-app-bar id="app-bar" app color="white" elevation="0" height="64" clipped-left>
       <div class="d-flex align-center">
         <p class="text-h5 font-weight-light ma-0 pa-0">Sunserg</p>
+        <v-chip dark label small class="ma-2" color="blue">BETA</v-chip>
       </div>
 
       <v-spacer></v-spacer>
@@ -13,30 +14,66 @@
       <v-btn href="https://www.sunserg.com/" target="_blank" icon>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
-      <v-avatar size="32" class="ml-8 mr-1">
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-      </v-avatar>
+      <v-menu offset-y transition="slide-y-transition" :close-on-content-click="true">
+        <template v-slot:activator="{ on:menu }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on:tooltip }">
+              <v-btn
+                fab
+                small
+                elevation="0"
+                class="ml-8 mr-1"
+                color="blue"
+                v-on="{...tooltip,...menu}"
+              >
+                <span class="white--text text-subtitle-1">JD</span>
+              </v-btn>
+            </template>
+            <span class="font-weight-bold py-0">{{name}}</span>
+            <div class="font-weight-light">{{email}}</div>
+          </v-tooltip>
+        </template>
+        <v-list>
+          <v-list-item @click="onProfileClick">
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>My Profile</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="onLogoutClick">
+            <v-list-item-icon>
+              <v-icon>mdi-power</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
-    <v-content>
-      <HelloWorld />
-    </v-content>
+    <v-main>
+      <HomePage />
+    </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import HomePage from "./views/HomePage";
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld
+    HomePage
   },
 
   data: () => ({
-    //
-  })
+    name: "John Doe",
+    email: "test@sunserg.com"
+  }),
+  methods: {
+    onProfileClick: function() {},
+    onLogoutClick: function() {}
+  }
 };
 </script>
 
