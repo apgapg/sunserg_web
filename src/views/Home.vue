@@ -1,13 +1,6 @@
 <template>
   <v-container>
-    <v-row class="text-center">
-      <v-col class="mb-4 mt-4">
-        <h1 class="display-2 font-weight-light mb-3">Welcome to Sunserg</h1>
-        <p
-          class="subheading font-weight-regular"
-        >The Best Search and Organizing Tool for Your Company</p>
-      </v-col>
-    </v-row>
+    <Intro />
     <div class="text-h6 font-weight-regular text-center mb-2 px-4">Start by connecting your accounts</div>
     <v-row class="justify-center">
       <v-col cols="12" sm="6" md="4" lg="4" xl="3">
@@ -99,8 +92,12 @@
 </template>
 
 <script>
+import Intro from "./../components/Intro.vue";
 export default {
   name: "HomePage",
+  components: {
+    Intro
+  },
   data: () => ({
     gDriveAuthenticated: null
   }),

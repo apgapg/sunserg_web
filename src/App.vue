@@ -14,7 +14,12 @@
       <v-btn href="https://www.sunserg.com/" target="_blank" icon>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
-      <v-menu offset-y transition="slide-y-transition" :close-on-content-click="true">
+      <v-menu
+        v-if="this.$route.name!='Login'"
+        offset-y
+        transition="slide-y-transition"
+        :close-on-content-click="true"
+      >
         <template v-slot:activator="{ on: menu, attrs }">
           <v-tooltip bottom :disabled="$vuetify.breakpoint.xs">
             <template v-slot:activator="{ on: tooltip }">
@@ -41,7 +46,7 @@
             </v-list-item-icon>
             <v-list-item-title>My Profile</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="onLogoutClick">
+          <v-list-item to="/login">
             <v-list-item-icon>
               <v-icon>mdi-power</v-icon>
             </v-list-item-icon>
@@ -52,20 +57,16 @@
     </v-app-bar>
 
     <v-main>
-      <HomePage />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HomePage from "./views/HomePage";
-
 export default {
   name: "App",
 
-  components: {
-    HomePage
-  },
+  components: {},
 
   data: () => ({
     name: "John Doe",
