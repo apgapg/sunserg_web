@@ -27,7 +27,7 @@
                 fab
                 small
                 elevation="0"
-                class="ml-sm-8 mr-1"
+                class="ml-2 ml-sm-8 mr-1"
                 color="blue"
                 v-bind="attrs"
                 v-on="{ ...menu , ...tooltip}"
