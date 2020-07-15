@@ -15,22 +15,23 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
       <v-menu offset-y transition="slide-y-transition" :close-on-content-click="true">
-        <template v-slot:activator="{ on:menu }">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on:tooltip }">
+        <template v-slot:activator="{ on: menu, attrs }">
+          <v-tooltip bottom :disabled="$vuetify.breakpoint.xs">
+            <template v-slot:activator="{ on: tooltip }">
               <v-btn
                 fab
                 small
                 elevation="0"
                 class="ml-8 mr-1"
                 color="blue"
-                v-on="{...tooltip,...menu}"
+                v-bind="attrs"
+                v-on="{ ...menu , ...tooltip}"
               >
                 <span class="white--text text-subtitle-1">JD</span>
               </v-btn>
             </template>
-            <span class="font-weight-bold py-0">{{name}}</span>
-            <div class="font-weight-light">{{email}}</div>
+            <span class="font-weight-bold py-0">{{ name }}</span>
+            <div class="font-weight-light">{{ email }}</div>
           </v-tooltip>
         </template>
         <v-list>
