@@ -13,23 +13,17 @@
       ></v-img>
     </div>
     <div class="d-flex justify-center my-2">
-      <v-progress-circular
+      <!-- <v-progress-circular
         indeterminate
         color="blue"
         size="28"
         class="ma-1"
         width="2"
         v-if="gDriveAuthenticated==null"
-      ></v-progress-circular>
+      ></v-progress-circular>-->
 
-      <v-btn
-        text
-        color="blue"
-        class
-        v-else-if="!gDriveAuthenticated"
-        v-on:click="onDriveLoginClick"
-      >+ Connect</v-btn>
-      <v-btn text color="red" class v-on:click="onDriveLogoutClick" v-else>DISCONNECT</v-btn>
+      <v-btn text color="blue" class v-on:click="onDriveLoginClick">+ Connect</v-btn>
+      <!-- <v-btn text color="red" class v-on:click="onDriveLogoutClick" v-else>DISCONNECT</v-btn> -->
     </div>
   </v-card>
 </template>
@@ -37,49 +31,49 @@
 <script>
 export default {
   name: "GDrive",
-   data: () => ({
-    gDriveAuthenticated: null
+  data: () => ({
+    gDriveAuthenticated: null,
   }),
-  methods: {
-    onDriveLoginClick: function() {
-      if (!this.gDriveAuthenticated) {
-        console.log("on login click called");
-        this.$gapi.getGapiClient().then(gapi => {
-          gapi.auth2.getAuthInstance().signIn();
-        });
-      }
-    },
-    onDriveLogoutClick: function() {
-      this.$gapi
-        .logout()
-        .then(() => {
-          this.gDriveAuthenticated = false;
-          console.log("Drive logout successful");
-        })
-        .catch(err => {
-          // eslint-disable-next-line no-console
-          console.error("Login call failed: %s", err.message);
-        });
-    },
-    // eslint-disable-next-line no-unused-vars
-    updateSigninStatus: function(isSignedIn, gapi) {
-      console.log("Auth changed: " + isSignedIn);
-      this.gDriveAuthenticated = isSignedIn;
-      //if (this.gDriveAuthenticated) listFiles(gapi);
-    }
-  },
-  computed: {},
-  mounted() {
-    this.$gapi.getGapiClient().then(gapi => {
-      this.updateSigninStatus(
-        gapi.auth2.getAuthInstance().isSignedIn.get(),
-        gapi
-      );
-      gapi.auth2.getAuthInstance().isSignedIn.listen(value => {
-        this.updateSigninStatus(value, gapi);
-      });
-    });
-  }
+  // methods: {
+  //   onDriveLoginClick: function() {
+  //     if (!this.gDriveAuthenticated) {
+  //       console.log("on login click called");
+  //       this.$gapi.getGapiClient().then(gapi => {
+  //         gapi.auth2.getAuthInstance().signIn();
+  //       });
+  //     }
+  //   },
+  //   onDriveLogoutClick: function() {
+  //     this.$gapi
+  //       .logout()
+  //       .then(() => {
+  //         this.gDriveAuthenticated = false;
+  //         console.log("Drive logout successful");
+  //       })
+  //       .catch(err => {
+  //         // eslint-disable-next-line no-console
+  //         console.error("Login call failed: %s", err.message);
+  //       });
+  //   },
+  //   // eslint-disable-next-line no-unused-vars
+  //   updateSigninStatus: function(isSignedIn, gapi) {
+  //     console.log("Auth changed: " + isSignedIn);
+  //     this.gDriveAuthenticated = isSignedIn;
+  //     //if (this.gDriveAuthenticated) listFiles(gapi);
+  //   }
+  // },
+  // computed: {},
+  // mounted() {
+  //   this.$gapi.getGapiClient().then(gapi => {
+  //     this.updateSigninStatus(
+  //       gapi.auth2.getAuthInstance().isSignedIn.get(),
+  //       gapi
+  //     );
+  //     gapi.auth2.getAuthInstance().isSignedIn.listen(value => {
+  //       this.updateSigninStatus(value, gapi);
+  //     });
+  //   });
+  // }
 };
 </script>
 
