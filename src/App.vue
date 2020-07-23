@@ -46,7 +46,7 @@
             </v-list-item-icon>
             <v-list-item-title>My Profile</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/login">
+          <v-list-item @click="onLogoutClick">
             <v-list-item-icon>
               <v-icon>mdi-power</v-icon>
             </v-list-item-icon>
@@ -70,12 +70,14 @@ export default {
 
   data: () => ({
     name: "John Doe",
-    email: "test@sunserg.com"
+    email: "test@sunserg.com",
   }),
   methods: {
-    onProfileClick: function() {},
-    onLogoutClick: function() {}
-  }
+    onProfileClick: function () {},
+    onLogoutClick: function () {
+      this.$store.dispatch("user/logout");  
+    },
+  },
 };
 </script>
 

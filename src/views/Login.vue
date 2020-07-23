@@ -3,7 +3,7 @@
     <Intro />
     <div class="text-h6 font-weight-regular text-center mb-2 px-4">Sign in to your account</div>
     <div class="d-flex justify-center">
-      <v-card v-if="!!error" class="py-3 px-4 mt-2" color="#ffebee" elevation="0">
+      <v-card v-if="!!error" class="py-3 px-4 mt-2 mx-2" color="#ffebee" elevation="0">
         <div class="d-flex">
           <v-icon color="red" class="mr-2">mdi-alert-outline</v-icon>
           <div class>{{error}}</div>
@@ -57,10 +57,11 @@
 
 <script>
 import Intro from "./../components/Intro.vue";
+import{getError} from "./../utils/apiUtils"
 export default {
   name: "Login",
   components: {
-    Intro
+    Intro,
   },
   data: () => ({
     valid: false,
@@ -69,22 +70,22 @@ export default {
     password: "",
     email: "",
     rules: {
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters",
-      emailMatch: () => "The email and password you entered don't match"
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
+      emailMatch: () => "The email and password you entered don't match",
     },
     emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+/.test(v) || "E-mail must be valid"
-    ]
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+/.test(v) || "E-mail must be valid",
+    ],
   }),
   computed: {
-    isLoading: function() {
+    isLoading: function () {
       return this.$store.state.user.isLoading;
-    }
+    },
   },
   methods: {
-    onLoginClick: function() {
+    onLoginClick: function () {
       this.error = null;
       this.$refs.form.validate();
 
@@ -93,18 +94,18 @@ export default {
       if (this.valid) {
         //this.$router.replace("/");
         this.$store
-          .dispatch("user/requestLogin", { cEmail, cPassword })
-          .then(resp => {
+          .dispatch("user/requestLogin", { email: cEmail, password: cPassword })
+          .then((resp) => {
             console.log(resp);
             this.$router.replace("/");
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
-            this.error = err;
+            this.error = getError(err);
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

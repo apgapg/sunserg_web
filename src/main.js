@@ -7,10 +7,13 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import Vuex from "vuex";
 import store from "./store/index";
+import empty from "is-empty"
 //import VueGAPI from 'vue-gapi'
 
 Vue.config.productionTip = false;
 Vue.use(Vuex);
+
+Vue.prototype.$isEmpty=empty;
 
 // var CLIENT_ID =
 //   "851934031431-c5gtr9vlli9090i6k209tbi6ekcjgf3p.apps.googleusercontent.com";

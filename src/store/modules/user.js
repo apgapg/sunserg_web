@@ -1,14 +1,13 @@
-// import shop from '../../api/shop'
-
 import httpClient from "../../api/api";
-
+import isEmpty from "is-empty";
+import router from "./../../router/index";
 // initial state
 // shape: [{ id, quantity }]
 const state = () => ({
   name: null,
   email: null,
   services: [],
-  token: localStorage.getItem("user-token") || "",
+  token: localStorage.getItem("user-token"),
   isLoading: false,
 });
 
@@ -50,7 +49,7 @@ const mutations = {
 
 // getters
 const getters = {
-  isAuthenticated: (state) => !!state.token,
+  isAuthenticated: (state) => !isEmpty(state.token),
   // cartProducts: (state, getters, rootState) => {
   //   return state.items.map(({ id, quantity }) => {
   //     const product = rootState.products.all.find(
@@ -105,29 +104,46 @@ const actions = {
   //       );
   //     }
   //   },
-  requestLogin({ commit }, { email, password }) {
+  requestLogin({ state, commit, dispatch }, { email, password }) {
     return new Promise((resolve, reject) => {
       // The Promise used for router redirect in login
       commit("isLoading", true);
+      console.log(email);
+
       httpClient
-        .post("/api/v1/login ", { email: email, password: password })
+        .post("/api/v1/login", { email: email, password: password })
         .then((resp) => {
+          console.log(resp);
           commit("isLoading", false);
           // const token = resp.data.token;
           // localStorage.setItem("user-token", token); // store the token in localstorage
           // commit(AUTH_SUCCESS, token);
           // // you have your token, now log in your user :)
           // dispatch(USER_REQUEST);
+
+          dispatch("setUser", resp.data);
+          console.log("headers is");
+          console.log(resp.headers);
+          const token = resp.data.token;
+          if (isEmpty(token)) {
+            throw "Token can't be empty in response";
+          }
+          console.log(token);
+          localStorage.setItem("user-token", token);
+          state.token = localStorage.getItem("user-token");
           resolve(resp);
         })
         .catch((err) => {
           commit("isLoading", false);
-          localStorage.removeItem("user-token"); // if the request fails, remove any possible user token if possible
           reject(err);
         });
     });
   },
-
+  logout({ state }) {
+    localStorage.removeItem("user-token");
+    state.token = null;
+    router.push("/login");
+  },
   setUser({ commit }, user) {
     commit("setName", user.name);
     commit("setEmail", user.email);
