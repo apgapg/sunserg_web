@@ -106,10 +106,7 @@ const actions = {
   //   },
   requestLogin({ state, commit, dispatch }, { email, password }) {
     return new Promise((resolve, reject) => {
-      // The Promise used for router redirect in login
       commit("isLoading", true);
-      console.log(email);
-
       httpClient
         .post("/api/v1/login", { email: email, password: password })
         .then((resp) => {
@@ -122,8 +119,6 @@ const actions = {
           // dispatch(USER_REQUEST);
 
           dispatch("setUser", resp.data);
-          console.log("headers is");
-          console.log(resp.headers);
           const token = resp.data.token;
           if (isEmpty(token)) {
             throw "Token can't be empty in response";
@@ -139,6 +134,41 @@ const actions = {
         });
     });
   },
+  requestSignup({ state, commit, dispatch }, { name, email, password }) {
+    return new Promise((resolve, reject) => {
+      commit("isLoading", true);
+      httpClient
+        .post("/api/v1/register", {
+          name: name,
+          email: email,
+          password: password,
+        })
+        .then((resp) => {
+          console.log(resp);
+          commit("isLoading", false);
+          // const token = resp.data.token;
+          // localStorage.setItem("user-token", token); // store the token in localstorage
+          // commit(AUTH_SUCCESS, token);
+          // // you have your token, now log in your user :)
+          // dispatch(USER_REQUEST);
+
+          dispatch("setUser", resp.data);
+          const token = resp.data.token;
+          if (isEmpty(token)) {
+            throw "Token can't be empty in response";
+          }
+          console.log(token);
+          localStorage.setItem("user-token", token);
+          state.token = localStorage.getItem("user-token");
+          resolve(resp);
+        })
+        .catch((err) => {
+          commit("isLoading", false);
+          reject(err);
+        });
+    });
+  },
+
   logout({ state }) {
     localStorage.removeItem("user-token");
     state.token = null;

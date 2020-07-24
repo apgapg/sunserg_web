@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <Intro />
-    <div class="text-h6 font-weight-regular text-center mb-2 px-4">Sign in to your account</div>
+    <div class="text-h6 font-weight-regular text-center mb-2 px-4">Register your account</div>
     <div class="d-flex justify-center">
       <v-card v-if="!!error" class="py-3 px-4 mt-2 mx-2" color="#ffebee" elevation="0">
         <div class="d-flex">
@@ -14,10 +14,10 @@
     <v-form ref="form" v-model="valid">
       <v-row class="justify-center my-2">
         <v-col cols="8" lg="3" sm="5">
-          <div class="text-overline">EMAIL</div>
+          <div class="text-overline">NAME</div>
           <v-text-field
-            v-model="email"
-            :rules="emailRules"
+            autocomplete="new-password"
+            v-model="name"
             required
             label="..."
             hide-details
@@ -25,8 +25,21 @@
             outlined
             append-icon="mdi-account"
           ></v-text-field>
+          <div class="text-overline mt-2">EMAIL</div>
+          <v-text-field
+            autocomplete="new-password"
+            v-model="email"
+            :rules="emailRules"
+            required
+            label="..."
+            hide-details
+            single-line
+            outlined
+            append-icon="mdi-at"
+          ></v-text-field>
           <div class="text-overline mt-2">PASSWORD</div>
           <v-text-field
+            autocomplete="new-password"
             v-model="password"
             :rules="[rules.required, rules.min]"
             :type="show1 ? 'text' : 'password'"
@@ -38,19 +51,28 @@
             append-icon="mdi-lock"
           ></v-text-field>
           <div class="text-center mt-2">
-            <v-btn v-if="!isLoading" :disabled="!valid" color="primary" @click="onLoginClick">
+            <v-btn v-if="!isLoading" :disabled="!valid" color="primary" @click="onSignupClick">
               <v-icon left>mdi-key</v-icon>SUBMIT
             </v-btn>
             <v-progress-circular indeterminate color="blue" size="28" width="2" v-else />
           </div>
           <div class="text-center mt-8">
             <div>
-              Don't have an account?
-              <a href="/signup" class="text-decoration-underline">Sign Up</a>
+              Already have an account?
+              <a href="/login" class="text-decoration-underline">Login</a>
             </div>
           </div>
           <div class="font-weight-light text-body-2 text-center mt-8">
-            <div>Hola! Good to see you again ;)</div>
+            <div>
+              By signing up, I agree to the Sunserg
+              <a
+                href="/terms#privacy-policy"
+                class="text-decoration-underline"
+              >Privacy Policy</a>
+              and
+              <br />
+              <a href="/terms" class="text-decoration-underline">Terms of Service</a>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -62,7 +84,7 @@
 import Intro from "./../components/Intro.vue";
 import { getError } from "./../utils/apiUtils";
 export default {
-  name: "Login",
+  name: "Signup",
   components: {
     Intro,
   },
@@ -70,12 +92,12 @@ export default {
     valid: false,
     show1: false,
     error: null,
-    password: "",
+    name: "",
     email: "",
+    password: "",
     rules: {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
-      emailMatch: () => "The email and password you entered don't match",
     },
     emailRules: [
       (v) => !!v || "E-mail is required",
@@ -88,16 +110,20 @@ export default {
     },
   },
   methods: {
-    onLoginClick: function () {
+    onSignupClick: function () {
       this.error = null;
       this.$refs.form.validate();
-
-      let cEmail = this.email;
-      let cPassword = this.password;
+      const cName = this.name;
+      const cEmail = this.email;
+      const cPassword = this.password;
       if (this.valid) {
         //this.$router.replace("/");
         this.$store
-          .dispatch("user/requestLogin", { email: cEmail, password: cPassword })
+          .dispatch("user/requestSignup", {
+            name: cName,
+            email: cEmail,
+            password: cPassword,
+          })
           .then((resp) => {
             console.log(resp);
             this.$router.replace("/");

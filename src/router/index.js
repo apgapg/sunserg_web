@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import Signup from "../views/Signup.vue";
+
 import NotFound from "../views/misc/NotFound.vue";
 import store from "../store/index.js";
 
@@ -15,6 +17,11 @@ const routes = [
     meta: {
       hideForAuth: true,
     },
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
   },
   {
     path: "/",
@@ -57,15 +64,12 @@ router.beforeEach((to, from, next) => {
     next("/login");
     return;
   }
-  console.log("ajdbjb");
   if (to.matched.some((record) => record.meta.hideForAuth)) {
     if (isLogin) {
       next("/");
       return;
     }
   }
-  console.log("ajdbjb");
-
   next();
 });
 export default router;
