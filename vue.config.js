@@ -2,7 +2,7 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
-  publicPath: "/",
+  publicPath: "",
   pwa: {
     name: "Sunserg",
     themeColor: "#2196F3",
