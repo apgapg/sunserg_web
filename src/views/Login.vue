@@ -13,7 +13,7 @@
 
     <v-form ref="form" v-model="valid">
       <v-row class="justify-center my-2">
-        <v-col cols="8" lg="3" sm="5">
+        <v-col cols="10" lg="3" sm="5">
           <div class="text-overline">EMAIL</div>
           <v-text-field
             v-model="email"
