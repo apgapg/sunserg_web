@@ -108,7 +108,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit("isLoading", true);
       httpClient
-        .post("/api/v1/login", { email: email, password: password })
+        .post("/v1/login", { email: email, password: password })
         .then((resp) => {
           console.log(resp);
           commit("isLoading", false);
@@ -119,12 +119,16 @@ const actions = {
           // dispatch(USER_REQUEST);
 
           dispatch("setUser", resp.data);
-          const token = resp.data.token;
+          const token = resp.data.token?.accessToken;
           if (isEmpty(token)) {
             throw "Token can't be empty in response";
           }
-          console.log(token);
+          const refreshToken = resp.data.token?.refreshToken;
+          if (isEmpty(refreshToken)) {
+            throw "Refresh token can't be empty in response";
+          }
           localStorage.setItem("user-token", token);
+          localStorage.setItem("refresh-token", refreshToken);
           state.token = localStorage.getItem("user-token");
           resolve(resp);
         })
@@ -138,7 +142,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit("isLoading", true);
       httpClient
-        .post("/api/v1/register", {
+        .post("/v1/register", {
           name: name,
           email: email,
           password: password,
