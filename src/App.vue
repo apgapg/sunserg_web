@@ -15,7 +15,7 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
       <v-menu
-        v-if="this.$route.name!='Login'"
+        v-if="this.$store.getters['user/isAuthenticated']"
         offset-y
         transition="slide-y-transition"
         :close-on-content-click="true"
