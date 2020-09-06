@@ -5,7 +5,7 @@ Visit Sunserg: [sunserg.com](sunserg.com)
 
 Live Product: [https://sunserg-387e7.web.app/](https://sunserg-387e7.web.app/)
 
-<img src="https://raw.githubusercontent.com/apgapg/sunserg_web/master/res/s1.png?raw=true"  height = "600" alt="sunserg">
+<img src="https://raw.githubusercontent.com/apgapg/sunserg_web/master/res/s1.png?raw=true"  width="auto" alt="sunserg">
 
 ## Highlights
 
